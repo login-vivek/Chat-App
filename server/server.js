@@ -19,7 +19,6 @@ app.use(cors({
     "http://localhost:5173",
     "https://chat-app-2-9g0n.onrender.com"
   ],
-  methods: ["GET","POST","PUT","DELETE"],
   credentials: true
 }));
 
@@ -29,7 +28,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
 
-/* HTTP SERVER FOR SOCKET */
+/* HTTP SERVER */
 const httpServer = createServer(app);
 
 /* SOCKET.IO */
@@ -39,17 +38,16 @@ const io = new Server(httpServer, {
       "http://localhost:5173",
       "https://chat-app-2-9g0n.onrender.com"
     ],
-    methods: ["GET","POST"],
     credentials: true
   }
 });
 
-/* MONGODB CONNECTION */
+/* DATABASE */
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB connected"))
 .catch(err => console.error("MongoDB error:", err));
 
-/* SOCKET HANDLERS */
+/* SOCKET EVENTS */
 initSocket(io);
 
 /* START SERVER */
