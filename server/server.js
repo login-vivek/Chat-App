@@ -4,7 +4,6 @@ import { Server } from "socket.io";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
-
 import authRoutes from "./routes/auth.js";
 import roomRoutes from "./routes/rooms.js";
 import { initSocket } from "./socket/socketHandlers.js";
@@ -13,44 +12,54 @@ dotenv.config();
 
 const app = express();
 
-/* CORS FIX */
-app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://chat-app-2-9g0n.onrender.com"
-  ],
-  credentials: true
-}));
+/* ----- CORS CONFIG (LOCAL + RENDER FRONTEND) ----- */
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://chat-app-2-9g0n.onrender.com"
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+  })
+);
 
 app.use(express.json());
 
-/* ROUTES */
+/* ----- ROUTES ----- */
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
 
-/* HTTP SERVER */
+/* ----- HTTP SERVER ----- */
 const httpServer = createServer(app);
 
-/* SOCKET.IO */
+/* ----- SOCKET.IO ----- */
 const io = new Server(httpServer, {
   cors: {
-    origin: [
-      "http://localhost:5173",
-      "https://chat-app-2-9g0n.onrender.com"
-    ],
+    origin: allowedOrigins,
+    methods: ["GET", "POST"],
     credentials: true
   }
 });
 
-/* DATABASE */
-mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB connected"))
-.catch(err => console.error("MongoDB error:", err));
+/* ----- DATABASE ----- */
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
 
-/* SOCKET EVENTS */
+/* ----- SOCKET HANDLERS ----- */
 initSocket(io);
 
-/* START SERVER */
+/* ----- START SERVER ----- */
 const PORT = process.env.PORT || 5000;
 
 httpServer.listen(PORT, () => {
