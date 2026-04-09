@@ -12,7 +12,7 @@ export default function Register() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const API = "https://chat-app-2-9g0n.onrender.com";
+  const API = "https://chat-app-server-d22c.onrender.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
