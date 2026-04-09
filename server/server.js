@@ -12,8 +12,12 @@ dotenv.config();
 
 const app = express();
 
-// Allow requests from anywhere (needed for Vercel frontend)
-app.use(cors({ origin: "*", credentials: true }));
+app.use(cors({
+  origin: "https://chat-app-tau-three-99.vercel.app",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+}));
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
@@ -22,7 +26,11 @@ app.use("/api/rooms", roomRoutes);
 const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
-  cors: { origin: "*", credentials: true },
+  cors: {
+    origin: "https://chat-app-tau-three-99.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST"],
+  },
 });
 
 mongoose
