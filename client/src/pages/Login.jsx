@@ -18,7 +18,7 @@ export default function Login() {
 
     try {
       const res = await fetch(
-        "https://chat-app-server.onrender.com/api/auth/login",
+        "https://chat-app-production-5010.up.railway.app/api/auth/login",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

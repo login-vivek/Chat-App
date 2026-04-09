@@ -1,8 +1,7 @@
 import { io } from "socket.io-client";
 
-// Create ONE socket connection and reuse it everywhere
-const socket = io("https://chat-app-server-d22c.onrender.com", {
-  autoConnect: false, // connect only after login
+const socket = io("https://chat-app-production-5010.up.railway.app", {
+  autoConnect: false,
 });
 
 export default socket;
