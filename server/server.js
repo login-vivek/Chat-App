@@ -13,10 +13,12 @@ dotenv.config();
 const app = express();
 
 app.use(cors({
-  origin: "https://chat-app-tau-three-99.vercel.app",
+  origin: process.env.FRONTEND_URL || "*",
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
 }));
+
+app.options("*", cors()); // handle preflight requests
 
 app.use(express.json());
 
@@ -27,7 +29,7 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: "https://chat-app-tau-three-99.vercel.app",
+    origin: process.env.FRONTEND_URL || "*",
     credentials: true,
     methods: ["GET", "POST"],
   },
