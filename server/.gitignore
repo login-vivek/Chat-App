@@ -4,4 +4,4 @@ server/node_modules
 
 # Client
 client/node_modules
-client/dist
+client/distgit init
