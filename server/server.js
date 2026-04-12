@@ -11,7 +11,7 @@ dotenv.config();
 
 const app = express();
 
-// Allow ALL origins — fixes CORS for any frontend
+// Allow ALL origins
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -21,6 +21,9 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
+
+// Health check route
+app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
